@@ -1,12 +1,18 @@
 const express = require("express");
 const app = express();
 
+app.set("view engine", "ejs");
+
 app.get("/", (req, res) => {
-    res.send("NexEvent is Live 🚀");
+    res.send("This is home");
+});
+
+app.get("/home", (req, res) => {
+    res.render("home");
 });
 
 app.get("/events", (req, res) => {
-    res.send("All Events Page");
+    res.render("events");
 });
 
 app.listen(3000, () => {
