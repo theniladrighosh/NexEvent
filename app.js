@@ -19,6 +19,7 @@ app.get("/events", (req, res) => {
 
 app.get("/profile", (req, res) => {
     res.render("profile");
+});
 app.get("/login", (req, res) => {
     res.render("login");
 });

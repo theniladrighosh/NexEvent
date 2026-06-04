@@ -1,15 +1,325 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Events</title>
-</head>
-<body>
-    <h1>All Events</h1>
+    <title>NexEvent - Events</title>
 
-    <ul>
-        <li>Tech Fest</li>
-        <li>Hackathon</li>
-        <li>Workshop</li>
-    </ul>
+    <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    min-height:100vh;
+}
+
+h1{
+    text-align:center;
+    margin-top:50px;
+    font-size:42px;
+}
+
+.filters{
+    text-align:center;
+    margin:30px 0;
+}
+
+.filters button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    margin:5px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.filters button:hover{
+    background:#1d4ed8;
+    transform:translateY(-3px);
+}
+
+.events-container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:25px;
+    padding:40px;
+}
+
+.event-card{
+    width:280px;
+    background:white;
+    color:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.event-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 0 25px rgba(37,99,235,0.6);
+}
+
+.event-card h3{
+    margin-bottom:15px;
+}
+
+/* Popup */
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+    background:white;
+    color:black;
+    width:500px;
+    padding:30px;
+    border-radius:15px;
+    position:relative;
+    animation:popup 0.3s ease;
+}
+
+@keyframes popup{
+    from{
+        transform:scale(0.8);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.close{
+    position:absolute;
+    right:20px;
+    top:15px;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.modal-content h2{
+    margin-bottom:20px;
+}
+
+.modal-content p{
+    margin-bottom:12px;
+}
+
+.register-btn{
+    margin-top:20px;
+    padding:12px 20px;
+    background:#16a34a;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.register-btn:hover{
+    background:#15803d;
+}
+
+</style>
+
+</head>
+
+<body>
+
+    <h1>Upcoming Events</h1>
+
+    <div class="filters">
+        <button onclick="filterEvents('all')">All</button>
+
+<button onclick="filterEvents('workshop')">
+    Workshops
+</button>
+
+<button onclick="filterEvents('competition')">
+    Competitions
+</button>
+
+<button onclick="filterEvents('club')">
+    Clubs
+</button>
+
+<button onclick="filterEvents('fest')">
+    Fests
+</button>
+    </div>
+
+    <div class="events-container">
+
+        <div class="event-card workshop"
+     onclick="showEvent(
+     'AI Workshop',
+     '10 June 2026',
+     '10:00 AM',
+     'Seminar Hall',
+     'Learn AI and build cool projects.'
+     )">
+
+    <h3>AI Workshop</h3>
+    <p>10 June 2026</p>
+
+</div>
+
+        <div class="event-card competition"
+     onclick="showEvent(
+     'Hackathon',
+     '15 June 2026',
+     '9:00 AM',
+     'Main Auditorium',
+     '24-hour coding competition.'
+     )">
+
+    <h3>Hackathon</h3>
+    <p>15 June 2026</p>
+
+</div>
+
+        <div class="event-card club"
+     onclick="showEvent(
+     'Coding Club Meet',
+     '18 June 2026',
+     '4:00 PM',
+     'Lab 3',
+     'Meet fellow programmers.'
+     )">
+
+    <h3>Coding Club Meet</h3>
+    <p>18 June 2026</p>
+
+    </div>
+
+    <div class="event-card fest"
+     onclick="showEvent(
+     'Tech Fest',
+     '25 June 2026',
+     '11:00 AM',
+     'College Ground',
+     'Annual technology festival.'
+     )">
+
+    <h3>Tech Fest</h3>
+    <p>25 June 2026</p>
+
+</div>
+
+    </div>
+
+    <div id="eventModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeModal()">
+                &times;
+            </span>
+
+            <h2 id="eventName"></h2>
+
+            <p>
+                <strong>Date:</strong>
+                <span id="eventDate"></span>
+            </p>
+
+            <p>
+                <strong>Time:</strong>
+                <span id="eventTime"></span>
+            </p>
+
+            <p>
+                <strong>Venue:</strong>
+                <span id="eventVenue"></span>
+            </p>
+
+            <p id="eventDescription"></p>
+
+            <button
+                class="register-btn"
+                onclick="registerEvent()">
+
+                Register Now
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function showEvent(
+            name,
+            date,
+            time,
+            venue,
+            description
+        ){
+
+            document.getElementById("eventName").innerText = name;
+            document.getElementById("eventDate").innerText = date;
+            document.getElementById("eventTime").innerText = time;
+            document.getElementById("eventVenue").innerText = venue;
+            document.getElementById("eventDescription").innerText = description;
+
+            document.getElementById("eventModal").style.display = "block";
+        }
+
+        function closeModal(){
+
+            document.getElementById("eventModal").style.display = "none";
+
+        }
+
+        function registerEvent(){
+
+            alert("Successfully Registered!");
+
+            document.getElementById("eventModal").style.display = "none";
+
+        }
+        function filterEvents(category){
+
+    const cards = document.querySelectorAll(".event-card");
+
+    cards.forEach(card => {
+
+        if(category === "all"){
+            card.style.display = "block";
+        }
+
+        else if(card.classList.contains(category)){
+            card.style.display = "block";
+        }
+
+        else{
+            card.style.display = "none";
+        }
+
+    });
+}
+
+    </script>
+
 </body>
 </html>
